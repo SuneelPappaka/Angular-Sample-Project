@@ -1,12 +1,24 @@
-﻿namespace HostelManagementAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HostelManagementAPI.Models
 {
     public class Complaints
     {
-        public int id { get; set; }
-        public int studentId{ get; set; }
-        public string  title{ get; set; }
-        public string    description{ get; set; }
-        public DateTime  complaintDate{ get; set; }
-        public string  status{ get; set; }
+        [Key]
+        public int ComplaintId { get; set; }
+
+        public int StudentId { get; set; }
+
+        public string ComplaintText { get; set; }
+
+        public DateTime ComplaintDate { get; set; }
+
+        public string Status { get; set; }
+
+        public DateTime? ResolvedDate { get; set; }
+
+        [ForeignKey("StudentId")]
+        public Students Student { get; set; }
     }
 }
