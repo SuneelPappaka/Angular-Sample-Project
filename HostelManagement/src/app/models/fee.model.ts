@@ -1,9 +1,10 @@
 export interface Fee {
-     id: number;
+    feeId: number;
   studentId: number;
   amount: number;
-  paymentDate: Date;
   dueDate: Date;
-  paymentMethod: string;
+  paidDate?: Date;
+  paymentMode: string;
   status: string;
 }
+// ng g interface models/attendance.model

@@ -8,5 +8,5 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './login.html',
   styleUrl: './login.css',
   standalone: true
-})
+}) 
 export class Login {}

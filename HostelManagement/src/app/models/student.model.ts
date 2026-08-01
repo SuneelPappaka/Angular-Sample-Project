@@ -1,15 +1,15 @@
 export interface Student {
-    id:number;
-
-name:string;
-
-email:string;
-
-phone:string;
-
-roomNo:number;
-
-course:string;
-
-gender:string;
+    studentId: number;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    dateOfBirth: Date;
+    mobile: string;
+    email: string;
+    address: string;
+    course: string;
+    yearOfStudy: number;
+    admissionDate: Date;
+    roomId?: number;
+    status: string;
 }

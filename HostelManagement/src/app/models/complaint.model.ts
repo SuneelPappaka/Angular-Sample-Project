@@ -1,8 +1,9 @@
 export interface Complaint {
-    id: number;
+complaintId: number;
   studentId: number;
-  title: string;
-  description: string;
+  complaintText: string;
   complaintDate: Date;
   status: string;
+  resolvedDate?: Date;
 }
+// ng g interface models/visitor.model

@@ -1,9 +1,11 @@
 export interface Room {
-    id: number;
+  roomId: number;
   roomNumber: string;
+  blockName: string;
+  floorNo: number;
   roomType: string;
   capacity: number;
   occupied: number;
-  floor: number;
+  monthlyFee: number;
   status: string;
 }
