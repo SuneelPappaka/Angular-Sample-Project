@@ -1,0 +1,53 @@
+<app-notification></app-notification>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div class="logo">
+      🏠 <span>HostelPro</span>
+    </div>
+
+    <ul>
+      <li class="active" (click)="navigateToDashboard()">📊 Dashboard</li>
+      <li (click)="navigateToStudents()">👨‍🎓 Students</li>
+      <li (click)="navigateToRooms()">🏠 Rooms</li>
+      <li (click)="navigateToAllocation()">🔑 Allocation</li>
+      <li (click)="navigateToFees()">💳 Fees</li>
+      <li (click)="navigateToAttendance()">📋 Attendance</li>
+      <li (click)="navigateToComplaints()">💬 Complaints</li>
+      <li (click)="navigateToReports()">📄 Reports</li>
+    </ul>
+
+    <button type="submit" class="logout" (click)="logout()">
+      Logout
+    </button>
+
+  </aside>
+
+
+  <!-- Main -->
+  <main class="main">
+
+    <header>
+      <div>
+        <h1>{{ greeting }}, Admin 👋</h1>
+        <p>Here is your hostel overview today.</p>
+      </div>
+
+
+      <div class="profile">
+        <img src="/Administrator.png">
+        <span>Administrator</span>
+      </div>
+
+    </header>
+
+    <!-- Page Content -->
+    <router-outlet></router-outlet>
+
+  </main>
+
+</div>
