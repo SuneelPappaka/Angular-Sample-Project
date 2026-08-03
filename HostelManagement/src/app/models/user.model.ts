@@ -1,8 +1,11 @@
 export interface UserModel {
-    userId: number;
+    id:number;
     username: string;
     password: string;
-    role: string;
-    studentId?: number;
-    wardenId?: number;
+    email: string;
+    confirmPassword: string;
+    phonenumber: string;
+    role?: string;
+    StudentId?: number;
+    WardenId?: number;
 }

@@ -6,42 +6,82 @@ namespace HostelManagementAPI.Models
     public class FlowStructure
     {
 
-//        Start
-//   │
-//   ▼
-//Login
-//   │
-//   ▼
-//Dashboard
-//   │
-//   ├── Student Management
-//   │      ├── Add
-//   │      ├── Update
-//   │      ├── Delete
-//   │      └── View
-//   │
-//   ├── Room Management
-//   │      ├── Add Room
-//   │      ├── Update Room
-//   │      └── View Rooms
-//   │
-//   ├── Room Allocation
-//   │
-//   ├── Fee Management
-//   │
-//   ├── Attendance
-//   │
-//   ├── Complaints
-//   │
-//   ├── Visitors
-//   │
-//   ├── Leave Requests
-//   │
-//   ├── Reports
-//   │
-//   └── Logout
-//         │
-//         ▼
-//        End
+        //        Start
+        //   │
+        //   ▼
+        //Login
+        //   │
+        //   ▼
+        //Dashboard
+        //   │
+        //   ├── Student Management
+        //   │      ├── Add
+        //   │      ├── Update
+        //   │      ├── Delete
+        //   │      └── View
+        //   │
+        //   ├── Room Management
+        //   │      ├── Add Room
+        //   │      ├── Update Room
+        //   │      └── View Rooms
+        //   │
+        //   ├── Room Allocation
+        //   │
+        //   ├── Fee Management
+        //   │
+        //   ├── Attendance
+        //   │
+        //   ├── Complaints
+        //   │
+        //   ├── Visitors
+        //   │
+        //   ├── Leave Requests
+        //   │
+        //   ├── Reports
+        //   │
+        //   └── Logout
+        //         │
+        //         ▼
+        //        End
+
+
+ //       Start
+ //                     │
+ //         ┌───────────┴───────────┐
+ //         │                       │
+ //         ▼                       ▼
+ //    New User               Existing User
+ //         │                       │
+ //         ▼                       ▼
+ //     Sign Up                  Login
+ //         │                       │
+ //         ▼                       │
+ //  Account Created                │
+ //         │                       │
+ //         └───────────┬───────────┘
+ //                     ▼
+ //                   Login
+ //                     │
+ //                     ▼
+ //                Dashboard
+ //                     │
+ //       ┌─────────────┼─────────────┐
+ //       │             │             │
+ //       ▼             ▼             ▼
+ //  Student Mgmt   Room Mgmt   Fee Mgmt
+ //       │             │             │
+ //       ├─────────────┼─────────────┤
+ //       ▼             ▼             ▼
+ //  Attendance Complaints   Visitors
+ //       │             │             │
+ //       ├─────────────┼─────────────┤
+ //       ▼             ▼
+ //Leave Requests   Reports
+ //       │
+ //       ▼
+ //     Logout
+ //       │
+ //       ▼
+ //      End
     }
 }

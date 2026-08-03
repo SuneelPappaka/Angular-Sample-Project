@@ -1,1 +1,159 @@
-<p>dashboard works!</p>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div class="logo">
+      🏠 <span>HostelPro</span>
+    </div>
+
+    <ul>
+      <li class="active">📊 Dashboard</li>
+      <li>👨‍🎓 Students</li>
+      <li>🏠 Rooms</li>
+      <li>🔑 Allocation</li>
+      <li>💳 Fees</li>
+      <li>📋 Attendance</li>
+      <li>💬 Complaints</li>
+      <li>📄 Reports</li>
+    </ul>
+
+    <button type="submit" class="logout" (click)="logout()">
+      Logout
+    </button>
+
+  </aside>
+
+
+
+  <!-- Main Area -->
+  <main class="main">
+
+
+    <header>
+
+      <div>
+        <h1>Good Evening, Admin 👋</h1>
+        <p>Here is your hostel overview today.</p>
+      </div>
+
+
+      <div class="profile">
+        <img src="/Administrator.png">
+        <span>Administrator</span>
+      </div>
+
+    </header>
+
+
+
+    <!-- Stats -->
+
+    <section class="stats">
+
+
+      <div class="stat-card blue">
+
+        <div>
+          <h2>350</h2>
+          <p>Total Students</p>
+        </div>
+
+        <span>👨‍🎓</span>
+
+      </div>
+
+
+
+      <div class="stat-card green">
+
+        <div>
+          <h2>85</h2>
+          <p>Total Rooms</p>
+        </div>
+
+        <span>🏠</span>
+
+      </div>
+
+
+
+      <div class="stat-card orange">
+
+        <div>
+          <h2>12</h2>
+          <p>Pending Fees</p>
+        </div>
+
+        <span>💰</span>
+
+      </div>
+
+
+
+      <div class="stat-card red">
+
+        <div>
+          <h2>7</h2>
+          <p>Complaints</p>
+        </div>
+
+        <span>⚠️</span>
+
+      </div>
+
+
+    </section>
+
+
+
+
+    <!-- Bottom Section -->
+
+    <section class="bottom">
+
+
+      <div class="panel">
+
+        <h3>Recent Activities</h3>
+
+        <div class="activity">
+          <span>👨‍🎓</span>
+          New student registered
+          <small>10 mins ago</small>
+        </div>
+
+        <div class="activity">
+          <span>🏠</span>
+          Room A-102 allocated
+          <small>30 mins ago</small>
+        </div>
+
+        <div class="activity">
+          <span>💳</span>
+          Fee payment received
+          <small>1 hour ago</small>
+        </div>
+
+      </div>
+
+
+
+
+      <div class="panel quick">
+
+        <h3>Quick Actions</h3>
+
+        <button>Add Student</button>
+        <button>Add Room</button>
+        <button>Generate Report</button>
+
+      </div>
+
+
+    </section>
+
+
+  </main>
+
+</div>
