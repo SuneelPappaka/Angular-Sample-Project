@@ -6,6 +6,8 @@ import { LoginServices } from '../../Servies/login-services';
 import { UserModel } from '../../models/user.model';
 import { response } from 'express';
 import { Router } from '@angular/router';
+import { LoaderService } from '../../Servies/loader.service.ts';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -38,9 +40,9 @@ export class Login {
   /**
    *
    */
+
   constructor(private http: HttpClient, private loginService: LoginServices,
-    private router: Router
-  ) {
+    private router: Router, private loaderService: LoaderService) {
 
 
   }
@@ -69,9 +71,21 @@ export class Login {
           this.showSignup = false;
           this.Submitted = false;
           this.ClearSignupData();
-          console.log('Signup successful:', response);
+         
+          Swal.fire({
+  icon: 'success',
+  title: 'Signup Successful!',
+  text: 'Your account has been created successfully.',
+  confirmButtonText: 'OK'
+});
         },
         error: (error) => {
+           Swal.fire({
+    icon: 'error',
+    title: 'Signup Failed',
+    text: 'Something went wrong. Please try again.',
+    confirmButtonText: 'OK'
+  });
           console.log(JSON.stringify(error.error, null, 2));
         },
 
@@ -83,13 +97,33 @@ export class Login {
     }
   }
   LoginSubmit(form: NgForm) {
+
+
     if (form.valid) {
+      this.loaderService.show();
       this.loginService.LoginSubmit(this.logindata).subscribe({
         next: (response) => {
+           Swal.fire({
+  icon: 'success',
+  title: 'Login Successful!',
+  text: 'You have been logged in successfully.',
+  confirmButtonText: 'OK'
+});
           console.log('Login successful:', response);
-          this.router.navigate(['/dashboard']);
+          localStorage.setItem('token', 'true');
+          this.router.navigate(['/dashboard'], {
+            replaceUrl: true
+          }).then(() => {
+            this.loaderService.hide();
+          });
         },
         error: (error) => {
+          Swal.fire({
+    icon: 'error',
+    title: 'Login Failed',
+    text: 'Invalid email or password.',
+    confirmButtonText: 'OK'
+  });
           console.log(JSON.stringify(error.error, null, 2));
         },
         complete: () => {
