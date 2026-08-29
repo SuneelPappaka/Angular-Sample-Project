@@ -24,6 +24,6 @@ namespace HostelManagementAPI.Models
 
         public string Status { get; set; }
 
-        public ICollection<Students> Students { get; set; }
+      
     }
 }

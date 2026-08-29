@@ -118,12 +118,14 @@ export class Login {
           });
         },
         error: (error) => {
+           this.loaderService.hide();
           Swal.fire({
     icon: 'error',
     title: 'Login Failed',
-    text: 'Invalid email or password.',
+    text: JSON.stringify(error.error, null, 2),
     confirmButtonText: 'OK'
   });
+
           console.log(JSON.stringify(error.error, null, 2));
         },
         complete: () => {

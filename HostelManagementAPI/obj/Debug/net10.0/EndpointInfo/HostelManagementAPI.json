@@ -79,6 +79,49 @@
         }
       }
     },
+    "/api/Students": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Students/CreateStudents": {
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Students"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Students"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Students"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [
@@ -183,6 +226,68 @@
         },
         "additionalProperties": false
       },
+      "Students": {
+        "required": [
+          "firstName"
+        ],
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "mobile": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "course": {
+            "type": "string",
+            "nullable": true
+          },
+          "yearOfStudy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "admissionDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "roomId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "WeatherForecast": {
         "type": "object",
         "properties": {
@@ -214,6 +319,9 @@
     },
     {
       "name": "Login"
+    },
+    {
+      "name": "Students"
     },
     {
       "name": "WeatherForecast"

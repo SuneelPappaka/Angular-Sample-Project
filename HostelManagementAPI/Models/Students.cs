@@ -33,8 +33,7 @@ namespace HostelManagementAPI.Models
 
         public string Status { get; set; }
 
-        [ForeignKey("RoomId")]
-        public Rooms Rooms { get; set; }
+        
 
     }
 }

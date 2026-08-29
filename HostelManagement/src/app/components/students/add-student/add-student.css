@@ -1,0 +1,47 @@
+.student-popup {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: #f8f9fa;
+}
+
+.student-dialog-content {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #f8f9fa;
+}
+
+/* Optional: remove the viewport-based height from the inner container */
+.student-dialog-content > .container-fluid {
+  min-height: 100%;
+}
+
+.card {
+  border-radius: 14px;
+}
+
+.form-control,
+.form-select {
+  border-radius: 8px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+.form-control.ng-invalid.ng-touched,
+.form-select.ng-invalid.ng-touched {
+  border-color: #dc3545;
+}
+
+.form-control.ng-valid.ng-touched,
+.form-select.ng-valid.ng-touched {
+  border-color: #198754;
+}
+
+.text-danger {
+  font-size: 13px;
+}

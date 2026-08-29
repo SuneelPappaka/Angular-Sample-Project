@@ -12,7 +12,7 @@ namespace HostelManagementAPI.Data
             
         }
         public DbSet<SignUp> SignUp { get; set; }
-
+        public DbSet<Students> Students { get; set; }
 
 
 

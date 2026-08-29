@@ -4,6 +4,7 @@ using HostelManagementAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HostelManagementAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260823022923_students")]
+    partial class students
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,47 @@ namespace HostelManagementAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("HostelManagementAPI.Models.Rooms", b =>
+                {
+                    b.Property<int>("RoomId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoomId"));
+
+                    b.Property<string>("BlockName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FloorNo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("MonthlyFee")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Occupied")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RoomNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoomType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RoomId");
+
+                    b.ToTable("Rooms");
+                });
 
             modelBuilder.Entity("HostelManagementAPI.Models.SignUp", b =>
                 {
@@ -117,6 +161,8 @@ namespace HostelManagementAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("StudentId");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("Students");
                 });
@@ -319,6 +365,15 @@ namespace HostelManagementAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("HostelManagementAPI.Models.Students", b =>
+                {
+                    b.HasOne("HostelManagementAPI.Models.Rooms", "Rooms")
+                        .WithMany("Students")
+                        .HasForeignKey("RoomId");
+
+                    b.Navigation("Rooms");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -368,6 +423,11 @@ namespace HostelManagementAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HostelManagementAPI.Models.Rooms", b =>
+                {
+                    b.Navigation("Students");
                 });
 #pragma warning restore 612, 618
         }

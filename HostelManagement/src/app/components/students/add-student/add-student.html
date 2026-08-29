@@ -1,1 +1,443 @@
-<p>add-student works!</p>
+<div class="student-dialog-content">
+
+    <div class="container-fluid bg-light min-vh-100 py-4">
+
+        <div class="container">
+
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1">Add Student</h2>
+                    <p class="text-muted mb-0">
+                        Register a new student in the system
+                    </p>
+                </div>
+
+                <button type="button" class="btn btn-outline-secondary" routerLink="/students">
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Back
+                </button>
+            </div>
+
+            <form (ngSubmit)="onSubmit(studentForm)" #studentForm="ngForm">
+
+                <div class="row g-4">
+
+                    <!-- Left Column -->
+                    <div class="col-lg-8">
+
+                        <!-- Personal Details -->
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body p-4">
+
+                                <div class="d-flex align-items-center mb-4">
+                                    <div class="icon-box bg-primary-subtle text-primary">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+
+                                    <div class="ms-3">
+                                        <h5 class="mb-1 fw-semibold">Personal Details</h5>
+                                        <small class="text-muted">
+                                            Basic information about the student
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-medium">
+                                            First Name
+                                        </label>
+
+                                        <input type="text" class="form-control form-control-lg" name="firstName"
+                                            [(ngModel)]="student.firstName" required minlength="2" maxlength="50"
+                                            pattern="^[A-Za-z ]+$" #firstName="ngModel"
+                                            placeholder="Enter first name" />
+
+                                        <div class="text-danger small mt-1"
+                                            *ngIf="firstName.invalid && (firstName.touched || studentForm.submitted)">
+                                            <span *ngIf="firstName.errors?.['required']">
+                                                First name is required.
+                                            </span>
+                                            <span *ngIf="firstName.errors?.['minlength']">
+                                                First name must be at least 2 characters.
+                                            </span>
+                                            <span *ngIf="firstName.errors?.['pattern']">
+                                                First name can contain only letters.
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-medium">
+                                            Last Name
+                                        </label>
+
+                                        <input type="text" class="form-control form-control-lg" name="lastName"
+                                            [(ngModel)]="student.lastName" required minlength="2" maxlength="50"
+                                            pattern="^[A-Za-z ]+$" #lastName="ngModel" placeholder="Enter last name" />
+
+                                        <div class="text-danger small mt-1"
+                                            *ngIf="lastName.invalid && (lastName.touched || studentForm.submitted)">
+                                            <span *ngIf="lastName.errors?.['required']">
+                                                Last name is required.
+                                            </span>
+                                            <span *ngIf="lastName.errors?.['minlength']">
+                                                Last name must be at least 2 characters.
+                                            </span>
+                                            <span *ngIf="lastName.errors?.['pattern']">
+                                                Last name can contain only letters.
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <select class="form-select form-select-lg" name="gender"
+                                            [(ngModel)]="student.gender" required #gender="ngModel">
+                                            <option value="">Select gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+
+                                        <div class="text-danger small mt-1"
+                                            *ngIf="gender.invalid && (gender.touched || studentForm.submitted)">
+                                            Gender is required.
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-medium">
+                                            Date of Birth
+                                        </label>
+
+                                        <input type="date" class="form-control form-control-lg" name="dateOfBirth"
+                                            [(ngModel)]="student.dateOfBirth" required [max]="today"
+                                            #dateOfBirth="ngModel" />
+
+                                        <div class="text-danger small mt-1"
+                                            *ngIf="dateOfBirth.invalid && (dateOfBirth.touched || studentForm.submitted)">
+                                            <span *ngIf="dateOfBirth.errors?.['required']">
+                                                Date of birth is required.
+                                            </span>
+                                            <span *ngIf="dateOfBirth.errors?.['max']">
+                                                Date of birth cannot be in the future.
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Details -->
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body p-4">
+
+                                <div class="d-flex align-items-center mb-4">
+                                    <div class="icon-box bg-success-subtle text-success">
+                                        <i class="bi bi-telephone"></i>
+                                    </div>
+
+                                    <div class="ms-3">
+                                        <h5 class="mb-1 fw-semibold">Contact Details</h5>
+                                        <small class="text-muted">
+                                            Student contact and address information
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-medium">
+                                            Mobile Number
+                                        </label>
+
+                                        <div class="input-group input-group-lg">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-phone"></i>
+                                            </span>
+
+                                            <input type="tel" class="form-control" name="mobile"
+                                                [(ngModel)]="student.mobile" required pattern="^[6-9][0-9]{9}$"
+                                                maxlength="10" #mobile="ngModel" placeholder="9876543210" />
+
+                                            <div class="text-danger small mt-1"
+                                                *ngIf="mobile.invalid && (mobile.touched || studentForm.submitted)">
+                                                <span *ngIf="mobile.errors?.['required']">
+                                                    Mobile number is required.
+                                                </span>
+
+                                                <span *ngIf="mobile.errors?.['pattern']">
+                                                    Enter a valid 10-digit mobile number.
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-medium">
+                                            Email
+                                        </label>
+
+                                        <div class="input-group input-group-lg">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-envelope"></i>
+                                            </span>
+
+                                            <input type="email" class="form-control" name="email"
+                                                [(ngModel)]="student.email" required maxlength="100" email
+                                                #email="ngModel" placeholder="student@example.com" />
+
+                                            <div class="text-danger small mt-1"
+                                                *ngIf="email.invalid && (email.touched || studentForm.submitted)">
+                                                <span *ngIf="email.errors?.['required']">
+                                                    Email is required.
+                                                </span>
+
+                                                <span *ngIf="email.errors?.['email']">
+                                                    Enter a valid email address.
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-medium">
+                                            Address
+                                        </label>
+
+                                        <textarea class="form-control" name="address" [(ngModel)]="student.address"
+                                            rows="4" required minlength="10" maxlength="250" #address="ngModel"
+                                            placeholder="Enter complete address"></textarea>
+
+                                        <div class="text-danger small mt-1"
+                                            *ngIf="address.invalid && (address.touched || studentForm.submitted)">
+                                            <span *ngIf="address.errors?.['required']">
+                                                Address is required.
+                                            </span>
+
+                                            <span *ngIf="address.errors?.['minlength']">
+                                                Address must be at least 10 characters.
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Academic Details -->
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body p-4">
+
+                                <div class="d-flex align-items-center mb-4">
+                                    <div class="icon-box bg-warning-subtle text-warning">
+                                        <i class="bi bi-mortarboard"></i>
+                                    </div>
+
+                                    <div class="ms-3">
+                                        <h5 class="mb-1 fw-semibold">Academic Details</h5>
+                                        <small class="text-muted">
+                                            Course and admission information
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-medium">
+                                            Course
+                                        </label>
+
+                                        <input type="text" class="form-control form-control-lg" name="course"
+                                            [(ngModel)]="student.course" required minlength="2" maxlength="100"
+                                            #course="ngModel" placeholder="e.g. B.Tech Computer Science" />
+
+                                        <div class="text-danger small mt-1"
+                                            *ngIf="course.invalid && (course.touched || studentForm.submitted)">
+                                            <span *ngIf="course.errors?.['required']">
+                                                Course is required.
+                                            </span>
+
+                                            <span *ngIf="course.errors?.['minlength']">
+                                                Course must be at least 2 characters.
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-medium">
+                                            Year of Study
+                                        </label>
+
+                                        <select class="form-select form-select-lg" name="yearOfStudy"
+                                            [(ngModel)]="student.yearOfStudy" required #yearOfStudy="ngModel">
+                                            <option [ngValue]="null">Select year</option>
+                                            <option [ngValue]="1">1st Year</option>
+                                            <option [ngValue]="2">2nd Year</option>
+                                            <option [ngValue]="3">3rd Year</option>
+                                            <option [ngValue]="4">4th Year</option>
+                                        </select>
+
+                                        <div class="text-danger small mt-1"
+                                            *ngIf="yearOfStudy.invalid && (yearOfStudy.touched || studentForm.submitted)">
+                                            Year of study is required.
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-medium">
+                                            Admission Date
+                                        </label>
+
+                                        <input type="date" class="form-control form-control-lg" name="admissionDate"
+                                            [(ngModel)]="student.admissionDate" required [max]="today"
+                                            #admissionDate="ngModel" />
+
+                                        <div class="text-danger small mt-1"
+                                            *ngIf="admissionDate.invalid && (admissionDate.touched || studentForm.submitted)">
+                                            <span *ngIf="admissionDate.errors?.['required']">
+                                                Admission date is required.
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-medium">
+                                            Status
+                                        </label>
+
+                                        <select class="form-select form-select-lg" name="status"
+                                            [(ngModel)]="student.status" required #status="ngModel">
+                                            <option value="">Select status</option>
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                        </select>
+
+                                        <div class="text-danger small mt-1"
+                                            *ngIf="status.invalid && (status.touched || studentForm.submitted)">
+                                            Status is required.
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="col-lg-4">
+
+                        <!-- Student Preview -->
+                        <div class="card border-0 shadow-sm mb-4">
+
+                            <div class="card-body text-center p-4">
+
+                                <div class="student-avatar mx-auto mb-3">
+                                    <i class="bi bi-person"></i>
+                                </div>
+
+                                <h5 class="fw-bold mb-1">
+                                    {{ student.firstName || 'Student Name' }}
+                                    {{ student.lastName }}
+                                </h5>
+
+                                <p class="text-muted mb-3">
+                                    {{ student.course || 'Course not selected' }}
+                                </p>
+
+                                <span class="badge rounded-pill" [class.bg-success]="student.status === 'Active'"
+                                    [class.bg-secondary]="student.status !== 'Active'">
+                                    {{ student.status || 'Status' }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Accommodation -->
+                        <div class="card border-0 shadow-sm mb-4">
+
+                            <div class="card-body p-4">
+
+                                <div class="d-flex align-items-center mb-4">
+                                    <div class="icon-box bg-info-subtle text-info">
+                                        <i class="bi bi-house"></i>
+                                    </div>
+
+                                    <div class="ms-3">
+                                        <h5 class="mb-1 fw-semibold">
+                                            Accommodation
+                                        </h5>
+                                        <small class="text-muted">
+                                            Hostel room details
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <label class="form-label fw-medium">
+                                    Room ID
+                                </label>
+
+                                <input type="number" class="form-control form-control-lg" name="roomId"
+                                    [(ngModel)]="student.roomId" min="1" #roomId="ngModel"
+                                    placeholder="Enter room ID" />
+
+                                <div class="text-danger small mt-1" *ngIf="roomId.invalid && roomId.touched">
+                                    <span *ngIf="roomId.errors?.['min']">
+                                        Room ID must be greater than 0.
+                                    </span>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="card border-0 shadow-sm">
+
+                            <div class="card-body p-4">
+
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mb-2"
+                                    [disabled]="studentForm.invalid">
+                                    <i class="bi bi-person-plus me-2"></i>
+                                    Add Student
+                                </button>
+
+
+                                <button type="reset" class="btn btn-light btn-lg w-100">
+                                    Reset Form
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>

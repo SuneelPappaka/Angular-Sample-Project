@@ -48,6 +48,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "HostelManagementAPI.Controllers.StudentsController",
+    "Method": "GetAllStudents",
+    "RelativePath": "api/Students",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HostelManagementAPI.Controllers.StudentsController",
+    "Method": "CreateStudents",
+    "RelativePath": "api/Students/CreateStudents",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "students",
+        "Type": "HostelManagementAPI.Models.Students",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "HostelManagementAPI.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",
