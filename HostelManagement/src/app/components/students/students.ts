@@ -24,9 +24,8 @@ export class Students {
   GridData: any[] = [];
 
   displayedColumns: string[] = [];
-  hideColumns: string[] = ['studentId','admissionDate','dateOfBirth','roomId','yearOfStudy','address','course'];
-  displayedActions:any[] = [
-    { ActionName: "--Select--", ActionCode: " " },
+  hideColumns: string[] = ['studentId', 'admissionDate', 'dateOfBirth', 'roomId', 'yearOfStudy', 'address', 'course'];
+  displayedActions: any[] = [
     { ActionName: "Edit", ActionCode: "E" },
     { ActionName: "Delete", ActionCode: "D" }
   ]
@@ -41,7 +40,7 @@ export class Students {
         this.students = data;
         this.GridData = data;
 
-      
+
         this.displayedColumns = data.length > 0 ? Object.keys(data[0]) : [];
 
         console.log(data);
@@ -51,7 +50,7 @@ export class Students {
       }
     });
   }
-  AddOrUpdateStudentComponent() {
+  AddOrUpdateStudentComponent(code: string, Addorupdateordelete: any, title: string) {
     const dialogRef = this.dialog.open(AddStudent, {
       width: '90vw',
       maxWidth: '1200px',
@@ -59,18 +58,38 @@ export class Students {
       maxHeight: '95vh',
       panelClass: 'student-dialog',
       data: {
-        title: 'Add Student'
+        title: title,
+        StudentDataEventData: Addorupdateordelete
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // refresh student list
+        this.loadStudents();
       }
     });
   }
 
-
-
-
+  onCommonActionChange(code: string, editData: any) {
+    if (code === 'E') {
+      this.AddOrUpdateStudentComponent(code, editData, 'Edit Student Details');
+    } else if (code === 'D') {
+      this.AddOrUpdateStudentComponent(code, editData, 'Delete Student Details');
+    } else {
+      this.AddOrUpdateStudentComponent("", {}, 'Add Student Details');
+    }
+  }
+  onSearchChange(searchValue: string) {
+    if (!searchValue) {
+      this.GridData = this.students; // Reset to original data if search is empty
+    } else {
+      const lowerSearchValue = searchValue.toLowerCase();
+      this.GridData = this.students.filter(student =>
+        Object.values(student).some(value =>
+          value && value.toString().toLowerCase().includes(lowerSearchValue)
+        )
+      );
+    }
+  }
 }

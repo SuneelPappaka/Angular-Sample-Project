@@ -22,7 +22,7 @@
               <button
                 type="button"
                 class="btn btn-primary px-4"
-                (click)="AddOrUpdateStudentComponent()">
+                (click)="AddOrUpdateStudentComponent('', {}, 'Add Student Details')">
                 <i class="bi bi-plus-lg me-2"></i>
                 Add Student
               </button>
@@ -44,7 +44,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Search students...">
+                  placeholder="Search students..." (input)="onSearchChange($event.target.value)">
               </div>
             </div>
 
@@ -72,7 +72,7 @@
         <div class="card-body pt-2">
           <div class="student-grid-container">
             <app-common-grid-component [GridData]="GridData" [displayedColumns]="displayedColumns"
-            [displayedActions]="displayedActions" [hideColumns]="hideColumns"></app-common-grid-component>
+            [displayedActions]="displayedActions" [hideColumns]="hideColumns" (commonAction)="onCommonActionChange($event.code, $event.data)"></app-common-grid-component>
           </div>
         </div>
 

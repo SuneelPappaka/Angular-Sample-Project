@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { Student } from '../../../models/student.model';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StudentService } from '../../../Servies/student-service';
 import Swal from 'sweetalert2';
 import { LoaderService } from '../../../Servies/loader.service.ts';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-student',
@@ -14,30 +15,57 @@ import { LoaderService } from '../../../Servies/loader.service.ts';
   standalone: true
 })
 export class AddStudent {
+
+  @Input() StudentDataEventData: Student | null = null;
+titlescreen="Add Student Details";
+btnsaveorupdatetext="Add Student";
   student: Student = {
     studentId: 0,
     firstName: '',
     lastName: '',
     gender: '',
-    dateOfBirth: new Date(),
+    dateOfBirth: '',
     mobile: '',
     email: '',
     address: '',
     course: '',
     yearOfStudy: 0,
-    admissionDate: new Date(),
+    admissionDate: '',
     roomId: undefined,
     status: 'Active'
   };
   today = new Date().toISOString().split('T')[0];
+  genderOptions = [
+  { value: 'Male', label: 'Male' },
+  { value: 'Female', label: 'Female' },
+  { value: 'Other', label: 'Other' }
+];
+ numberOfYearsOptions = [
+  { value: 1, label: 'Year 1' },
+  { value: 2, label: 'Year 2' },
+  { value: 3, label: 'Year 3' },
+  { value: 4, label: 'Year 4' }
+];
+
  
   /**
    *
    */
-  constructor(private studentService: StudentService, private loaderService: LoaderService) {
-
-
+  constructor(private studentService: StudentService, private loaderService: LoaderService,
+     @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef: MatDialogRef<AddStudent>
+  ) {
+this.titlescreen = data.title;
+this.student = data.StudentDataEventData || this.student;
+  this.student.dateOfBirth = this.formatDate(this.student.dateOfBirth);
+  this.student.admissionDate = this.formatDate(this.student.admissionDate);
+this.btnsaveorupdatetext = this.student.studentId ? 'Update Student' : 'Add Student';
+  console.log('Data received from parent:', data);
   }
+  
+formatDate(date: string): string {
+  return date ? date.substring(0, 10) : '';
+}
   onSubmit(form: NgForm) {
     console.log(form.value);
     // Call your API/service here
@@ -49,7 +77,7 @@ export class AddStudent {
       
           Swal.fire({
             icon: 'success',
-            title: 'Signup Successful!',
+            title: this.student.studentId ? 'Update Successful' : 'Save Successful',
             text: JSON.stringify(data),
             confirmButtonText: 'OK'
           })
@@ -67,8 +95,10 @@ export class AddStudent {
           confirmButtonText: 'OK'
         });
         }
+       // Close the dialog and pass true to indicate success
+      
       });
-      // You can emit an event or call a service to save the student data
+       this.dialogRef.close(true); // You can emit an event or call a service to save the student data
     } else {
       Swal.fire({
           icon: 'error',

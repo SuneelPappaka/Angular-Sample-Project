@@ -1,76 +1,153 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { LoaderService } from '../../Servies/loader.service.ts';
 
 @Component({
   selector: 'app-common-grid-component',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './common-grid-component.html',
   styleUrl: './common-grid-component.css',
   standalone: true
 })
 export class CommonGridComponent {
-@Input() GridData:any[]=[];
-@Input() displayedColumns:any[]=[];
-@Input() displayedActions:any[]=[];
-@Input() hideColumns:string[]=[];
-currentPage = 1;
-pageSize = 1;
-Math = Math;
-
-get totalPages(): number {
-  return Math.ceil(this.GridData.length / this.pageSize);
+  @Input() GridData: any[] = [];
+  @Input() displayedColumns: any[] = [];
+  @Input() displayedActions: any[] = [];
+  @Input() hideColumns: string[] = [];
+  @Output() commonAction = new EventEmitter<{ code: string, data: any }>();
+  currentPage = 1;
+  pageSize = 1;
+  Math = Math;
+  selectionOption!: "";
+  
+/**
+ *
+ */
+constructor(private loaderService:LoaderService) {
+  
 }
-
-get paginatedGridData(): any[] {
-  const startIndex = (this.currentPage - 1) * this.pageSize;
-
-  return this.GridData.slice(
-    startIndex,
-    startIndex + this.pageSize
-  );
-}
-
-changePage(page: number): void {
-  if (page >= 1 && page <= this.totalPages) {
-    this.currentPage = page;
+  onCommonActionChange(actioncode: string, row: any) {
+    this.commonAction.emit({ code: actioncode, data: row });
   }
-}
+  exportExcel(): void {
+ this.loaderService.show();
+    const table = document.getElementById('Commongrid');
 
-onPageSizeChange(): void {
-  this.currentPage = 1;
-}
-onActionChange(actioncode:string,row:any){
-alert(actioncode);
-}
-exportExcel(): void {const table = document.getElementById('Commongrid');
+    if (!table) {
+      return;
+    }
 
-if (!table) {
-  return;
-}
+    const worksheet = XLSX.utils.table_to_sheet(table);
+    const range = XLSX.utils.decode_range(worksheet['!ref']!);
 
-const worksheet = XLSX.utils.table_to_sheet(table);
-const range = XLSX.utils.decode_range(worksheet['!ref']!);
+    // Remove last column
+    for (let row = range.s.r; row <= range.e.r; row++) {
+      const cell = XLSX.utils.encode_cell({
+        r: row,
+        c: range.e.c
+      });
 
-// Remove last column
-for (let row = range.s.r; row <= range.e.r; row++) {
-  const cell = XLSX.utils.encode_cell({
-    r: row,
-    c: range.e.c
+      delete worksheet[cell];
+    }
+
+    range.e.c--;
+    worksheet['!ref'] = XLSX.utils.encode_range(range);
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+
+    XLSX.writeFile(workbook, 'CommonGrid.xlsx');
+ this.loaderService.hide();
+  }
+  async exportTableToPdf(): Promise<void> {
+   this.loaderService.show();
+     const table = document.getElementById('Commongrid');
+
+  if (!table) {
+    return;
+  }
+const columnsToRemove = [6];
+  // Clone table so original UI is not affected
+  const clonedTable = table.cloneNode(true) as HTMLElement;
+
+  // Remove 3rd column (index = 2)
+  clonedTable.querySelectorAll('tr').forEach(row => {
+    const cells = row.children;
+
+    columnsToRemove
+    .sort((a, b) => b - a)
+    .forEach(index => {
+      cells[index]?.remove();
+    });
   });
 
-  delete worksheet[cell];
-}
+  // Position clone outside visible area
+  clonedTable.style.position = 'absolute';
+  clonedTable.style.left = '-99999px';
+  clonedTable.style.top = '0';
 
-range.e.c--;
-worksheet['!ref'] = XLSX.utils.encode_range(range);
+  document.body.appendChild(clonedTable);
 
-const workbook = XLSX.utils.book_new();
+  try {
+    const canvas = await html2canvas(clonedTable, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff'
+    });
 
-XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+    const imgData = canvas.toDataURL('image/png');
 
-XLSX.writeFile(workbook, 'CommonGrid.xlsx');
+    const pdf = new jsPDF('p', 'mm', 'a4');
 
-}
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const margin = 10;
+    const imgWidth = pageWidth - margin * 2;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = margin;
+
+    pdf.addImage(
+      imgData,
+      'PNG',
+      margin,
+      position,
+      imgWidth,
+      imgHeight
+    );
+
+    heightLeft -= pageHeight - margin * 2;
+
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight + margin;
+
+      pdf.addPage();
+
+      pdf.addImage(
+        imgData,
+        'PNG',
+        margin,
+        position,
+        imgWidth,
+        imgHeight
+      );
+
+      heightLeft -= pageHeight - margin * 2;
+    }
+
+    pdf.save('CommonGrid.pdf');
+ this.loaderService.hide();
+  } finally {
+    // Remove cloned table
+    clonedTable.remove();
+    this.loaderService.hide();
+  }
+  }
 }

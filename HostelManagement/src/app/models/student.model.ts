@@ -3,13 +3,13 @@ export interface Student {
     firstName: string;
     lastName: string;
     gender: string;
-    dateOfBirth: Date;
+    dateOfBirth: string;
     mobile: string;
     email: string;
     address: string;
     course: string;
     yearOfStudy: number;
-    admissionDate: Date;
+    admissionDate: string;
     roomId?: number;
     status: string;
 }

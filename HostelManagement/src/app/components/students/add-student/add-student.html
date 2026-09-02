@@ -7,7 +7,7 @@
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h2 class="fw-bold mb-1">Add Student</h2>
+                    <h2 class="fw-bold mb-1">{{titlescreen}}</h2>
                     <p class="text-muted mb-0">
                         Register a new student in the system
                     </p>
@@ -95,18 +95,23 @@
                                     </div>
 
                                     <div class="col-md-6">
+                                         <label class="form-label fw-medium">
+                                            Gender
+                                        </label>
                                         <select class="form-select form-select-lg" name="gender"
                                             [(ngModel)]="student.gender" required #gender="ngModel">
-                                            <option value="">Select gender</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
+                                            <option value="undefined">Select gender</option>
+
+                                            <option *ngFor="let option of genderOptions" [value]="option.value">
+                                                {{ option.label }}
+                                            </option>
                                         </select>
 
                                         <div class="text-danger small mt-1"
                                             *ngIf="gender.invalid && (gender.touched || studentForm.submitted)">
                                             Gender is required.
                                         </div>
+
 
 
                                     </div>
@@ -282,14 +287,12 @@
                                         <label class="form-label fw-medium">
                                             Year of Study
                                         </label>
-
                                         <select class="form-select form-select-lg" name="yearOfStudy"
                                             [(ngModel)]="student.yearOfStudy" required #yearOfStudy="ngModel">
-                                            <option [ngValue]="null">Select year</option>
-                                            <option [ngValue]="1">1st Year</option>
-                                            <option [ngValue]="2">2nd Year</option>
-                                            <option [ngValue]="3">3rd Year</option>
-                                            <option [ngValue]="4">4th Year</option>
+                                            <option [ngValue]="undefined">Select year</option>
+                                            <option *ngFor="let y of numberOfYearsOptions" [value]="y.value">
+                                                {{ y.label }}
+                                            </option>
                                         </select>
 
                                         <div class="text-danger small mt-1"
@@ -324,7 +327,7 @@
 
                                         <select class="form-select form-select-lg" name="status"
                                             [(ngModel)]="student.status" required #status="ngModel">
-                                            <option value="">Select status</option>
+                                            <option value="undefined">Select status</option>
                                             <option value="Active">Active</option>
                                             <option value="Inactive">Inactive</option>
                                         </select>
@@ -419,7 +422,7 @@
                                 <button type="submit" class="btn btn-primary btn-lg w-100 mb-2"
                                     [disabled]="studentForm.invalid">
                                     <i class="bi bi-person-plus me-2"></i>
-                                    Add Student
+                                    {{btnsaveorupdatetext}}
                                 </button>
 
 
