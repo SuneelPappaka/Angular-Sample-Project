@@ -2,6 +2,7 @@
 using HostelManagementAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HostelManagementAPI.Controllers
 {
@@ -14,12 +15,41 @@ namespace HostelManagementAPI.Controllers
         {
             _AppDbContext = appDbContext;
         }
+        //[HttpGet]
+        //public IActionResult GetAllStudents()
+        //{
+        //    List<Students> s = _AppDbContext.Students.ToList();
+
+        //    return Ok(s);
+        //}
         [HttpGet]
-        public IActionResult GetAllStudents()
+        public IActionResult GetAllStudents(int pageNumber = 1, int pageSize = 10)
         {
-            List<Students> s = _AppDbContext.Students.ToList();
-            return Ok(s);
+            if (pageNumber < 1)
+                pageNumber = 1;
+
+            if (pageSize < 1)
+                pageSize = 10;
+
+            var query = _AppDbContext.Students.AsNoTracking();
+
+            int totalCount = query.Count();
+
+            var students = query
+                .OrderBy(s => s.StudentId)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return Ok(new
+            {
+                data = students,
+                totalCount = totalCount,
+                pageNumber = pageNumber,
+                pageSize = pageSize
+            });
         }
+
         [HttpPost("CreateStudents")]
         public async Task<IActionResult> CreateStudents(Students students )
         {

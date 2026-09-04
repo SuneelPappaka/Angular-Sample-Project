@@ -11,9 +11,20 @@ export class StudentService {
   private apiUrl = 'https://localhost:7188/api/Students/';
 
   // READ - Get all students
-  getStudents(): Observable<Student[]> {
-    return this.http.get<Student[]>(this.apiUrl);
-  }
+  // getStudents(): Observable<Student[]> {
+  //   return this.http.get<Student[]>(this.apiUrl);
+  // }
+ //getStudents(pageNumber: number, pageSize: number): Observable<Student[]> {
+  //return this.http.get<Student[]>(
+    //`${this.apiUrl}/Students/GetAllStudents?pageNumber=${pageNumber}&pageSize=${pageSize}`
+  //);
+//}
+  getStudents(pageNumber: number, pageSize: number){
+   return this.http.get<any>(
+     `${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`
+   );
+ }
+
 
   // READ - Get student by ID
   getStudentById(id: number): Observable<Student> {

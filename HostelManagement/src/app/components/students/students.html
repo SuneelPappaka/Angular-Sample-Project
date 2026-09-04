@@ -49,19 +49,20 @@
             </div>
 
             <div class="col-md-3">
-              <select class="form-select">
-                <option selected>All Classes</option>
-                <option>Class 1</option>
-                <option>Class 2</option>
-                <option>Class 3</option>
+              <select class="form-select" (change)="onStatusYearChange($any($event.target).value)">
+                <option value="0" selected>All Years</option>
+                <option value="1">Year 1</option>
+                <option value="2">Year 2</option>
+                <option value="3">Year 3</option>
+                <option value="4">Year 4</option>
               </select>
             </div>
 
             <div class="col-md-3">
-              <select class="form-select">
-                <option selected>All Status</option>
-                <option>Active</option>
-                <option>Inactive</option>
+              <select class="form-select" (change)="onStatusChange($any($event.target).value)">
+                <option value="All Status" selected>All Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
               </select>
             </div>
 
@@ -72,7 +73,10 @@
         <div class="card-body pt-2">
           <div class="student-grid-container">
             <app-common-grid-component [GridData]="GridData" [displayedColumns]="displayedColumns"
-            [displayedActions]="displayedActions" [hideColumns]="hideColumns" (commonAction)="onCommonActionChange($event.code, $event.data)"></app-common-grid-component>
+            [displayedActions]="displayedActions" [hideColumns]="hideColumns" [totalCount]="totalCount"
+            (commonAction)="onCommonActionChange($event.code, $event.data)"
+            (Pagechange)="onchangePage($event.pageNumber,$event.totalPages)"
+            (PageSizechange)="onchangePageSize($event.pageNumber)"></app-common-grid-component>
           </div>
         </div>
 

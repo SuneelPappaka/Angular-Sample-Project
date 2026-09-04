@@ -17,6 +17,11 @@ export class Students {
   /**
    *
    */
+  pageNumber = 1;
+pageSize = 2;
+totalCount = 0;
+
+pageSizeOptions = [1,2,3,10, 25, 50, 100];
   constructor(private dialog: MatDialog) {
   }
 
@@ -35,21 +40,31 @@ export class Students {
   }
 
   loadStudents(): void {
-    this.studentService.getStudents().subscribe({
-      next: (data: any[]) => {
-        this.students = data;
-        this.GridData = data;
+  this.studentService.getStudents(this.pageNumber, this.pageSize).subscribe({
+    next: (response: any) => {
 
+      this.students = response.data;
+      this.GridData = response.data;
 
-        this.displayedColumns = data.length > 0 ? Object.keys(data[0]) : [];
+      this.totalCount = response.totalCount;
 
-        console.log(data);
-      },
-      error: (error: any) => {
-        console.error('Error loading students', error);
-      }
-    });
-  }
+      this.displayedColumns =
+        response.data.length > 0
+          ? Object.keys(response.data[0])
+          : [];
+
+      console.log(response);
+    },
+
+    error: (error: any) => {
+      console.error('Error loading students', error);
+
+      this.students = [];
+      this.GridData = [];
+      this.totalCount = 0;
+    }
+  });
+}
   AddOrUpdateStudentComponent(code: string, Addorupdateordelete: any, title: string) {
     const dialogRef = this.dialog.open(AddStudent, {
       width: '90vw',
@@ -80,6 +95,20 @@ export class Students {
       this.AddOrUpdateStudentComponent("", {}, 'Add Student Details');
     }
   }
+  onchangePage(pageNumber : number,totalPages: number): void {
+    if (pageNumber < 1 || pageNumber > totalPages) {
+      return;
+    }
+
+    this.pageNumber = pageNumber;
+    
+    this.loadStudents();
+  }
+
+  onchangePageSize(pageSize: number): void {
+    this.pageSize = pageSize;
+    this.loadStudents();
+  }
   onSearchChange(searchValue: string) {
     if (!searchValue) {
       this.GridData = this.students; // Reset to original data if search is empty
@@ -89,6 +118,26 @@ export class Students {
         Object.values(student).some(value =>
           value && value.toString().toLowerCase().includes(lowerSearchValue)
         )
+      );
+    }
+  }
+  onStatusChange(statusValue: string) {
+    if (!statusValue || statusValue === 'All Status') {
+      this.GridData = this.students; // Reset to original data if search is empty
+    } else {
+      const lowerStatusValue = statusValue.toLowerCase();
+      this.GridData = this.students.filter(student =>
+        student.status && student.status.toString().toLowerCase() === lowerStatusValue
+      );
+    }
+  }
+  onStatusYearChange(yearValue: string) {
+    if (!yearValue || yearValue === '0') {
+      this.GridData = this.students; // Reset to original data if search is empty
+    } else {
+      const lowerYearValue = yearValue.toLowerCase();
+      this.GridData = this.students.filter(student =>
+        student.yearOfStudy && student.yearOfStudy.toString().toLowerCase() === lowerYearValue
       );
     }
   }

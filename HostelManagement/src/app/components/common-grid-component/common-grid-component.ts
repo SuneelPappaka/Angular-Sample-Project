@@ -5,6 +5,7 @@ import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { LoaderService } from '../../Servies/loader.service.ts';
+import { time } from 'console';
 
 @Component({
   selector: 'app-common-grid-component',
@@ -19,22 +20,28 @@ export class CommonGridComponent {
   @Input() displayedActions: any[] = [];
   @Input() hideColumns: string[] = [];
   @Output() commonAction = new EventEmitter<{ code: string, data: any }>();
-  currentPage = 1;
-  pageSize = 1;
+  @Output() Pagechange = new EventEmitter<{ pageNumber : number ,totalPages:number}>(); 
+  @Output() PageSizechange = new EventEmitter<{ pageNumber: number }>();
+  pageNumber = 1;
+  pageSize = 2;
+  @Input() totalCount = 0;
+  totalPages = 0;
+  pageSizeOptions = [1,2,3,10, 25, 50, 100];
   Math = Math;
   selectionOption!: "";
-  
-/**
- *
- */
-constructor(private loaderService:LoaderService) {
-  
-}
+
+  /**
+   *
+   */
+  constructor(private loaderService: LoaderService) {
+
+  }
+
   onCommonActionChange(actioncode: string, row: any) {
     this.commonAction.emit({ code: actioncode, data: row });
   }
   exportExcel(): void {
- this.loaderService.show();
+    this.loaderService.show();
     const table = document.getElementById('Commongrid');
 
     if (!table) {
@@ -62,73 +69,57 @@ constructor(private loaderService:LoaderService) {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
 
     XLSX.writeFile(workbook, 'CommonGrid.xlsx');
- this.loaderService.hide();
+    this.loaderService.hide();
   }
   async exportTableToPdf(): Promise<void> {
-   this.loaderService.show();
-     const table = document.getElementById('Commongrid');
+    this.loaderService.show();
+    const table = document.getElementById('Commongrid');
 
-  if (!table) {
-    return;
-  }
-const columnsToRemove = [6];
-  // Clone table so original UI is not affected
-  const clonedTable = table.cloneNode(true) as HTMLElement;
+    if (!table) {
+      return;
+    }
+    const columnsToRemove = [6];
+    // Clone table so original UI is not affected
+    const clonedTable = table.cloneNode(true) as HTMLElement;
 
-  // Remove 3rd column (index = 2)
-  clonedTable.querySelectorAll('tr').forEach(row => {
-    const cells = row.children;
+    // Remove 3rd column (index = 2)
+    clonedTable.querySelectorAll('tr').forEach(row => {
+      const cells = row.children;
 
-    columnsToRemove
-    .sort((a, b) => b - a)
-    .forEach(index => {
-      cells[index]?.remove();
-    });
-  });
-
-  // Position clone outside visible area
-  clonedTable.style.position = 'absolute';
-  clonedTable.style.left = '-99999px';
-  clonedTable.style.top = '0';
-
-  document.body.appendChild(clonedTable);
-
-  try {
-    const canvas = await html2canvas(clonedTable, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: '#ffffff'
+      columnsToRemove
+        .sort((a, b) => b - a)
+        .forEach(index => {
+          cells[index]?.remove();
+        });
     });
 
-    const imgData = canvas.toDataURL('image/png');
+    // Position clone outside visible area
+    clonedTable.style.position = 'absolute';
+    clonedTable.style.left = '-99999px';
+    clonedTable.style.top = '0';
 
-    const pdf = new jsPDF('p', 'mm', 'a4');
+    document.body.appendChild(clonedTable);
 
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
+    try {
+      const canvas = await html2canvas(clonedTable, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff'
+      });
 
-    const margin = 10;
-    const imgWidth = pageWidth - margin * 2;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const imgData = canvas.toDataURL('image/png');
 
-    let heightLeft = imgHeight;
-    let position = margin;
+      const pdf = new jsPDF('p', 'mm', 'a4');
 
-    pdf.addImage(
-      imgData,
-      'PNG',
-      margin,
-      position,
-      imgWidth,
-      imgHeight
-    );
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
 
-    heightLeft -= pageHeight - margin * 2;
+      const margin = 10;
+      const imgWidth = pageWidth - margin * 2;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight + margin;
-
-      pdf.addPage();
+      let heightLeft = imgHeight;
+      let position = margin;
 
       pdf.addImage(
         imgData,
@@ -140,14 +131,42 @@ const columnsToRemove = [6];
       );
 
       heightLeft -= pageHeight - margin * 2;
-    }
 
-    pdf.save('CommonGrid.pdf');
- this.loaderService.hide();
-  } finally {
-    // Remove cloned table
-    clonedTable.remove();
-    this.loaderService.hide();
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight + margin;
+
+        pdf.addPage();
+
+        pdf.addImage(
+          imgData,
+          'PNG',
+          margin,
+          position,
+          imgWidth,
+          imgHeight
+        );
+
+        heightLeft -= pageHeight - margin * 2;
+      }
+
+      pdf.save('CommonGrid.pdf');
+      this.loaderService.hide();
+    } finally {
+      // Remove cloned table
+      clonedTable.remove();
+      this.loaderService.hide();
+    }
   }
+
+  changePage(page: number) {
+    //this.Pagechange.emit({ page: this.pageNumber, totalPages: this.totalPages });
+    this.Pagechange.emit({ pageNumber : page, totalPages: this.totalCount });
+  }
+    
+  
+
+  changePageSize() {
+    //this.PageSizechange.emit({ pageNumber: this.pageNumber });
+    this.PageSizechange.emit({ pageNumber: this.pageSize });
   }
 }
