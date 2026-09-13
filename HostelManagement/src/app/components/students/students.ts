@@ -4,6 +4,7 @@ import { Student } from '../../models/student.model';
 import { StudentService } from '../../Servies/student-service';
 import { CommonGridComponent } from '../common-grid-component/common-grid-component';
 import { AddStudent } from './add-student/add-student';
+import { LoaderService } from '../../Servies/loader.service.ts';
 
 @Component({
   selector: 'app-students',
@@ -22,7 +23,7 @@ pageSize = 2;
 totalCount = 0;
 
 pageSizeOptions = [1,2,3,10, 25, 50, 100];
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog ,private loaderService: LoaderService) {
   }
 
   students: Student[] = [];
@@ -40,6 +41,7 @@ pageSizeOptions = [1,2,3,10, 25, 50, 100];
   }
 
   loadStudents(): void {
+    this.loaderService.show();
   this.studentService.getStudents(this.pageNumber, this.pageSize).subscribe({
     next: (response: any) => {
 
@@ -54,10 +56,12 @@ pageSizeOptions = [1,2,3,10, 25, 50, 100];
           : [];
 
       console.log(response);
+      this.loaderService.hide();
     },
 
     error: (error: any) => {
       console.error('Error loading students', error);
+      this.loaderService.hide();
 
       this.students = [];
       this.GridData = [];
@@ -107,6 +111,7 @@ pageSizeOptions = [1,2,3,10, 25, 50, 100];
 
   onchangePageSize(pageSize: number): void {
     this.pageSize = pageSize;
+    this.pageNumber = 1;
     this.loadStudents();
   }
   onSearchChange(searchValue: string) {

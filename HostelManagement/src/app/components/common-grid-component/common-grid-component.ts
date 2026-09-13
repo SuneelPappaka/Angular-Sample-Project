@@ -21,7 +21,7 @@ export class CommonGridComponent {
   @Input() hideColumns: string[] = [];
   @Output() commonAction = new EventEmitter<{ code: string, data: any }>();
   @Output() Pagechange = new EventEmitter<{ pageNumber : number ,totalPages:number}>(); 
-  @Output() PageSizechange = new EventEmitter<{ pageNumber: number }>();
+  @Output() PageSizechange = new EventEmitter<{ pageSize: number }>();
   pageNumber = 1;
   pageSize = 2;
   @Input() totalCount = 0;
@@ -34,7 +34,7 @@ export class CommonGridComponent {
    *
    */
   constructor(private loaderService: LoaderService) {
-
+    
   }
 
   onCommonActionChange(actioncode: string, row: any) {
@@ -160,6 +160,7 @@ export class CommonGridComponent {
 
   changePage(page: number) {
     //this.Pagechange.emit({ page: this.pageNumber, totalPages: this.totalPages });
+    this.pageNumber=page;
     this.Pagechange.emit({ pageNumber : page, totalPages: this.totalCount });
   }
     
@@ -167,6 +168,7 @@ export class CommonGridComponent {
 
   changePageSize() {
     //this.PageSizechange.emit({ pageNumber: this.pageNumber });
-    this.PageSizechange.emit({ pageNumber: this.pageSize });
+    this.pageNumber=this.pageSize;
+    this.PageSizechange.emit({ pageSize: this.pageSize });
   }
 }
