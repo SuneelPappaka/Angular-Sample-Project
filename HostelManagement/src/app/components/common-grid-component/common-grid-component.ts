@@ -25,7 +25,7 @@ export class CommonGridComponent {
   pageNumber = 1;
   pageSize = 2;
   @Input() totalCount = 0;
-  totalPages = 0;
+  @Input() totalPages = 0;
   pageSizeOptions = [1,2,3,10, 25, 50, 100];
   Math = Math;
   selectionOption!: "";
@@ -168,7 +168,7 @@ export class CommonGridComponent {
 
   changePageSize() {
     //this.PageSizechange.emit({ pageNumber: this.pageNumber });
-    this.pageNumber=this.pageSize;
+    this.pageNumber=1;
     this.PageSizechange.emit({ pageSize: this.pageSize });
   }
 }

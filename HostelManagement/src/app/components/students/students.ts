@@ -20,7 +20,7 @@ export class Students {
    */
   pageNumber = 1;
 pageSize = 2;
-totalCount = 0;
+totalCount = 0;totalPages = 0;
 
 pageSizeOptions = [1,2,3,10, 25, 50, 100];
   constructor(private dialog: MatDialog ,private loaderService: LoaderService) {
@@ -49,6 +49,7 @@ pageSizeOptions = [1,2,3,10, 25, 50, 100];
       this.GridData = response.data;
 
       this.totalCount = response.totalCount;
+      this.totalPages = Math.ceil(this.totalCount / this.pageSize);
 
       this.displayedColumns =
         response.data.length > 0

@@ -73,7 +73,8 @@
         <div class="card-body pt-2">
           <div class="student-grid-container">
             <app-common-grid-component [GridData]="GridData" [displayedColumns]="displayedColumns"
-            [displayedActions]="displayedActions" [hideColumns]="hideColumns" [totalCount]="totalCount"
+            [displayedActions]="displayedActions" [hideColumns]="hideColumns" [totalCount]="totalCount" 
+            [totalPages]="totalPages"
             (commonAction)="onCommonActionChange($event.code, $event.data)"
             (Pagechange)="onchangePage($event.pageNumber,$event.totalPages)"
             (PageSizechange)="onchangePageSize($event.pageSize)"></app-common-grid-component>
